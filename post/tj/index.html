@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>
+        On the Trail of Trader Joe&#39;s Warehouses ::
+        Hello Friend — A simple theme for Hugo
+      </title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta
+  name="description"
+  content="Recently, I came across with a 2015 project by Sam Burer via hackernews archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of a well-known retailer called Trader Joe&amp;rsquo;s by using the location of the stores in US. He does it very creatively by exploiting centroids of the clusters suggestd by the K-means algorithm, a basic algorithm that is primarly used to tackle unsupervised, clustering, problems in the Machine learning domain."
+/>
+<meta
+  name="keywords"
+  content="K-means"
+/>
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="https://ytalp17.github.io/sampleasample/post/tj/" />
+
+
+
+
+
+<link rel="stylesheet" href="https://ytalp17.github.io/sampleasample/assets/style.css" />
+
+<link rel="stylesheet" href="https://ytalp17.github.io/sampleasample/style.css" />
+
+
+<link
+  rel="apple-touch-icon-precomposed"
+  sizes="144x144"
+  href="https://ytalp17.github.io/sampleasample/img/apple-touch-icon-144-precomposed.png"
+/>
+<link rel="shortcut icon" href="https://ytalp17.github.io/sampleasample/img/favicon.png" />
+
+
+<link href="https://ytalp17.github.io/sampleasample/assets/fonts/Inter-Italic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://ytalp17.github.io/sampleasample/assets/fonts/Inter-Regular.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://ytalp17.github.io/sampleasample/assets/fonts/Inter-Medium.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://ytalp17.github.io/sampleasample/assets/fonts/Inter-MediumItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://ytalp17.github.io/sampleasample/assets/fonts/Inter-Bold.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+<link href="https://ytalp17.github.io/sampleasample/assets/fonts/Inter-BoldItalic.woff2" rel="preload" type="font/woff2" as="font" crossorigin="">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="On the Trail of Trader Joe&#39;s Warehouses"/>
+<meta name="twitter:description" content="Finding the location of TJ&#39;s warehouses using its stores by the help go K-means clustering"/>
+
+
+
+<meta property="og:title" content="On the Trail of Trader Joe&#39;s Warehouses" />
+<meta property="og:description" content="Finding the location of TJ&#39;s warehouses using its stores by the help go K-means clustering" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ytalp17.github.io/sampleasample/post/tj/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2022-02-14T10:19:48+08:00" />
+<meta property="article:modified_time" content="2022-02-14T10:19:48+08:00" /><meta property="og:site_name" content="Hello Friend" />
+
+
+
+
+
+
+
+  </head>
+  <body class="dark-theme">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >hello friend</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/sampleasample/about">About</a></li>
+        
+      
+        
+          <li><a href="/sampleasample/showcase">Showcase</a></li>
+        
+      
+      
+      
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/sampleasample/about">About</a></li>
+      
+    
+      
+        <li><a href="/sampleasample/showcase">Showcase</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg
+  class="theme-toggler"
+  width="24"
+  height="24"
+  viewBox="0 0 48 48"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"
+  />
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  
+  
+
+  <div class="post">
+    <h1 class="post-title">On the Trail of Trader Joe&rsquo;s Warehouses</h1>
+    <div class="post-meta">
+      
+        <span class="post-date">
+          2022-02-14
+        </span>
+
+        
+          
+        
+      
+
+      
+
+
+      
+    </div>
+
+    
+      <span class="post-tags">
+        
+          <a href="https://ytalp17.github.io/sampleasample/tags/clustering/">#Clustering</a>&nbsp;
+        
+      </span>
+    
+
+    
+      <figure class="post-cover">
+  
+    <img src="https://ytalp17.github.io/sampleasample/img/traderjoes.jpeg" alt="On the Trail of Trader Joe&#39;s Warehouses"/>
+  
+
+  
+</figure>
+
+    
+
+    <div class="post-content">
+      
+      <p>Recently, I came across with a 2015 project by Sam Burer via hackernews archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of a well-known retailer called Trader Joe&rsquo;s by using the location of the stores in US. He does it very creatively by exploiting centroids of the clusters suggestd by the K-means algorithm, a basic algorithm that is primarly used to tackle unsupervised, clustering, problems in the Machine learning domain.</p>
+<p>In this post, I try to -somehow- update his project as I encouraged by oldness of his post (june 2015)&hellip;</p>
+<p>Trader Joe&rsquo;s is reluctant to make the location of its warehouses public, however one can reach information about some of its warehouses by digging deeper the internet. Sam manages to find the location of six of them from various internet sources and shares them with their evidences in his original post .  I managed to increase the number of his findings to twelve, thanks to this blog post. These &ldquo;true&rdquo; locations of the warehouses will be used to compare validity of our findings at the end.</p>
+<p>The number of Trader Joe&rsquo;s has increased from 451 to 539 since Sam&rsquo;s post. Besides, they have omitted the definitive list of their stores in the mean time. Hence, I needed to build a pipline that systematically scrapes their web site and creates a data set of their inclusive list of stores and their corresponding addresses. The data set can be downloaded from here. Feel free to use it for your own purpose.</p>
+<p>As one can imagine, the maintaned addresses are string type and needed to be transformed in a way that our algortihm would make sense of. In order to succeed that, the process called geocoding which resolves addresses into coordinates pairs comes into play. Coordinate pairs are actually nothing but a float type tuples which of a numerical algorithm would make sense without any problem.</p>
+<p>The K-means algorithm requires a pre-defined number of clusters, k, where observations are partitioned into. Thus, one needs to guess the number of clusters in prior to algorithm starts running. In the original post, Sam guesses it as 22, approximately square root of the number of Trader Joe&rsquo;s at the time (451), in a sense that each warehouse would serve on average about 22 stores. I experimented with numbers between 21 and 23 for k in the line of his logic, however I couldnt come up with valid results; given that one-third of the Trader Joe&rsquo;s are located in California, some warehouses in other states would end up serving only up to 5-6 stores according to this scenario. Hence, I decided to approach the problem slightly more analytically and apply a quick silhouette analysis.</p>
+<p>Silhuette score of the final configuration of the data is calculated by averaging  silhoutte value of all the observations. A silhuette value of an observation can be taught as its degree of similarity to its own cluster compared to other clusters. The score ranges from -1 to +1, where a high value indicates a more appropriate clustering configuration.</p>
+<p>\ <!-- raw HTML omitted -->
+<img src="img/Sit.png" alt="Alt text">{width=40%}</p>
+<!-- raw HTML omitted -->
+<p>Silhuette scores of different k values ranging from 13 to 20 is calculated, and k=19 is found to be the most appropriate.  Besides number of stores that each warehouses serve is more homogenously distributed this time. It should be noted that K-means algorithm only converges to a local minimum rather than a global minimum, hence the results are strongly influenced by the initial conditions. In other words, cluster configurations may seem difference from run to run unless it&rsquo;s random state is seeded, even as k stays constant.</p>
+<p>The following map shows all 539 TJ&rsquo;s in yellow, while showing the  19 guessed warehouses in red. Also, the 12 &lsquo;known&rsquo; warehouses which are listed above are depicted in green. It can be seen that the actual warehouses are not too far from guessed warehouses. It is very fascinating to have not that bad guesses with such a basic algortihm.\</p>
+<p>\ <!-- raw HTML omitted -->
+<img src="img/TJ.png" alt="Alt text"></p>
+<!-- raw HTML omitted -->
+
+    </div>
+    
+      
+        <div class="pagination">
+          <div class="pagination__title">
+            <span class="pagination__title-h"
+              >Read other posts</span
+            >
+            <hr />
+          </div>
+          <div class="pagination__buttons">
+            
+            
+              <span class="button next">
+                <a href="https://ytalp17.github.io/sampleasample/post/hello/">
+                  <span class="button__text">Hello Friend</span>
+                  <span class="button__icon">→</span>
+                </a>
+              </span>
+            
+          </div>
+        </div>
+      
+    
+
+    
+      
+        
+
+      
+    
+  </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a
+  href="/"
+  class="logo"
+  style="text-decoration: none;"
+>
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367" />
+</svg>
+</span>
+    <span class="logo__text"
+      >hello friend</span
+    >
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+        <span
+          >© 2022 Powered by
+          <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span
+        >
+        <span
+          >Theme created by
+          <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span
+        >
+      </div>
+    
+  </div>
+</footer>
+
+<script src="https://ytalp17.github.io/sampleasample/assets/main.js"></script>
+<script src="https://ytalp17.github.io/sampleasample/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>
