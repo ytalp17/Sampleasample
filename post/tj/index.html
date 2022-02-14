@@ -198,13 +198,9 @@
 <p>As one can imagine, the maintaned addresses are string type and needed to be transformed in a way that our algortihm would make sense of. In order to succeed that, the process called geocoding which resolves addresses into coordinates pairs comes into play. Coordinate pairs are actually nothing but a float type tuples which of a numerical algorithm would make sense without any problem.</p>
 <p>The K-means algorithm requires a pre-defined number of clusters, k, where observations are partitioned into. Thus, one needs to guess the number of clusters in prior to algorithm starts running. In the original post, Sam guesses it as 22, approximately square root of the number of Trader Joe&rsquo;s at the time (451), in a sense that each warehouse would serve on average about 22 stores. I experimented with numbers between 21 and 23 for k in the line of his logic, however I couldnt come up with valid results; given that one-third of the Trader Joe&rsquo;s are located in California, some warehouses in other states would end up serving only up to 5-6 stores according to this scenario. Hence, I decided to approach the problem slightly more analytically and apply a quick silhouette analysis.</p>
 <p>Silhuette score of the final configuration of the data is calculated by averaging  silhoutte value of all the observations. A silhuette value of an observation can be taught as its degree of similarity to its own cluster compared to other clusters. The score ranges from -1 to +1, where a high value indicates a more appropriate clustering configuration.</p>
-<p>\ <!-- raw HTML omitted -->
-<img src="/img/Sit.png" alt="Alt text">{width=40%}</p>
 <!-- raw HTML omitted -->
 <p>Silhuette scores of different k values ranging from 13 to 20 is calculated, and k=19 is found to be the most appropriate.  Besides number of stores that each warehouses serve is more homogenously distributed this time. It should be noted that K-means algorithm only converges to a local minimum rather than a global minimum, hence the results are strongly influenced by the initial conditions. In other words, cluster configurations may seem difference from run to run unless it&rsquo;s random state is seeded, even as k stays constant.</p>
 <p>The following map shows all 539 TJ&rsquo;s in yellow, while showing the  19 guessed warehouses in red. Also, the 12 &lsquo;known&rsquo; warehouses which are listed above are depicted in green. It can be seen that the actual warehouses are not too far from guessed warehouses. It is very fascinating to have not that bad guesses with such a basic algortihm.\</p>
-<p>\ <!-- raw HTML omitted -->
-<img src="/img/TJ.png" alt="Alt text"></p>
 <!-- raw HTML omitted -->
 
     </div>
