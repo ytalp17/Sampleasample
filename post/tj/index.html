@@ -11,11 +11,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta
   name="description"
-  content="Recently, I came across with a 2015 project by Sam Burer via hackernews archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of a well-known retailer called Trader Joe&amp;rsquo;s by using the location of the stores in US. He does it very creatively by exploiting centroids of the clusters suggestd by the K-means algorithm, a basic algorithm that is primarly used to tackle unsupervised, clustering, problems in the Machine learning domain."
+  content="Recently, I came across a project by Sam Burer via Hacker News archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of Trader Joe&amp;rsquo;s, a well-known grocery retailer in the US, by utilizing the location of each Trader Joe&amp;rsquo;s store. He does it very creatively by exploiting centroids of the clusters suggested by the K-means algorithm, a basic algorithm that is primarily used to tackle unsupervised, clustering, problems in the Machine learning domain."
 />
 <meta
   name="keywords"
-  content="K-means"
+  content="Clustering, K-means, GeoDataFrame, Trader Joe&#39;s, Silhouette"
 />
 <meta name="robots" content="noodp" />
 <link rel="canonical" href="https://ytalp17.github.io/sampleasample/post/tj/" />
@@ -47,12 +47,12 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="On the Trail of Trader Joe&#39;s Warehouses"/>
-<meta name="twitter:description" content="Finding the location of TJ&#39;s warehouses using its stores by the help go K-means clustering"/>
+<meta name="twitter:description" content="Finding the location of Trader Joe&#39;s, a well-known grocery retailer in the US, warehouses by utilizing the location of each TJ stores."/>
 
 
 
 <meta property="og:title" content="On the Trail of Trader Joe&#39;s Warehouses" />
-<meta property="og:description" content="Finding the location of TJ&#39;s warehouses using its stores by the help go K-means clustering" />
+<meta property="og:description" content="Finding the location of Trader Joe&#39;s, a well-known grocery retailer in the US, warehouses by utilizing the location of each TJ stores." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://ytalp17.github.io/sampleasample/post/tj/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2022-02-14T10:19:48+08:00" />
@@ -80,7 +80,7 @@
 </svg>
 </span>
     <span class="logo__text"
-      >hello friend</span
+      >Sample A Sample</span
     >
     <span class="logo__cursor"></span>
   
@@ -165,8 +165,15 @@
       
 
       
+        <span class="post-author"
+          >— Written by Yigitalp Berber</span
+        >
 
 
+      
+        <span class="post-read-time"
+          >— 4 min read</span
+        >
       
     </div>
 
@@ -174,6 +181,14 @@
       <span class="post-tags">
         
           <a href="https://ytalp17.github.io/sampleasample/tags/clustering/">#Clustering</a>&nbsp;
+        
+          <a href="https://ytalp17.github.io/sampleasample/tags/k-means/">#K-means</a>&nbsp;
+        
+          <a href="https://ytalp17.github.io/sampleasample/tags/geodataframe/">#GeoDataFrame</a>&nbsp;
+        
+          <a href="https://ytalp17.github.io/sampleasample/tags/trader-joes/">#Trader Joe&#39;s</a>&nbsp;
+        
+          <a href="https://ytalp17.github.io/sampleasample/tags/silhouette/">#Silhouette</a>&nbsp;
         
       </span>
     
@@ -191,42 +206,37 @@
 
     <div class="post-content">
       
-      <p>Recently, I came across with a 2015 project by Sam Burer via hackernews archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of a well-known retailer called Trader Joe&rsquo;s by using the location of the stores in US. He does it very creatively by exploiting centroids of the clusters suggestd by the K-means algorithm, a basic algorithm that is primarly used to tackle unsupervised, clustering, problems in the Machine learning domain.</p>
-<p>In this post, I try to -somehow- update his project as I encouraged by oldness of his post (june 2015)&hellip;</p>
-<p>Trader Joe&rsquo;s is reluctant to make the location of its warehouses public, however one can reach information about some of its warehouses by digging deeper the internet. Sam manages to find the location of six of them from various internet sources and shares them with their evidences in his original post .  I managed to increase the number of his findings to twelve, thanks to this blog post. These &ldquo;true&rdquo; locations of the warehouses will be used to compare validity of our findings at the end.</p>
-<p>The number of Trader Joe&rsquo;s has increased from 451 to 539 since Sam&rsquo;s post. Besides, they have omitted the definitive list of their stores in the mean time. Hence, I needed to build a pipline that systematically scrapes their web site and creates a data set of their inclusive list of stores and their corresponding addresses. The data set can be downloaded from here. Feel free to use it for your own purpose.</p>
-<p>As one can imagine, the maintaned addresses are string type and needed to be transformed in a way that our algortihm would make sense of. In order to succeed that, the process called geocoding which resolves addresses into coordinates pairs comes into play. Coordinate pairs are actually nothing but a float type tuples which of a numerical algorithm would make sense without any problem.</p>
-<p>The K-means algorithm requires a pre-defined number of clusters, k, where observations are partitioned into. Thus, one needs to guess the number of clusters in prior to algorithm starts running. In the original post, Sam guesses it as 22, approximately square root of the number of Trader Joe&rsquo;s at the time (451), in a sense that each warehouse would serve on average about 22 stores. I experimented with numbers between 21 and 23 for k in the line of his logic, however I couldnt come up with valid results; given that one-third of the Trader Joe&rsquo;s are located in California, some warehouses in other states would end up serving only up to 5-6 stores according to this scenario. Hence, I decided to approach the problem slightly more analytically and apply a quick silhouette analysis.</p>
-<p>Silhuette score of the final configuration of the data is calculated by averaging  silhoutte value of all the observations. A silhuette value of an observation can be taught as its degree of similarity to its own cluster compared to other clusters. The score ranges from -1 to +1, where a high value indicates a more appropriate clustering configuration.</p>
-<p><img src="/img/sit.png" alt="Alt text">{width=40%}
-<!-- raw HTML omitted --></p>
-<p>Silhuette scores of different k values ranging from 13 to 20 is calculated, and k=19 is found to be the most appropriate.  Besides number of stores that each warehouses serve is more homogenously distributed this time. It should be noted that K-means algorithm only converges to a local minimum rather than a global minimum, hence the results are strongly influenced by the initial conditions. In other words, cluster configurations may seem difference from run to run unless it&rsquo;s random state is seeded, even as k stays constant.</p>
-<p>The following map shows all 539 TJ&rsquo;s in yellow, while showing the  19 guessed warehouses in red. Also, the 12 &lsquo;known&rsquo; warehouses which are listed above are depicted in green. It can be seen that the actual warehouses are not too far from guessed warehouses. It is very fascinating to have not that bad guesses with such a basic algortihm.</p>
-<p><img src="img/tj.png" alt="Alt text">
-<!-- raw HTML omitted --></p>
+      <p>Recently, I came across a <a href="https://sburer.github.io/2015/06/02/Trader-Joes.html">project</a> by <strong>Sam Burer</strong> via Hacker News archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of Trader Joe&rsquo;s, a well-known grocery retailer in the US, by utilizing the location of each Trader Joe&rsquo;s store.  He does it very creatively by exploiting centroids of the clusters suggested by the <strong>K-means</strong> algorithm, a basic algorithm that is primarily used to tackle unsupervised, clustering, problems in the Machine learning domain.</p>
+<p>With this project, I try not only to -somehow- update his project as I am encouraged by the oldness of his post (June 2015) but also tweak it just a little bit with my interpretation.</p>
+<p>Okey, let&rsquo;s start..</p>
+<p>The number of Trader Joe&rsquo;s has increased from 451 to 539 since Sam&rsquo;s post. Besides, they have omitted the definitive list of their stores from their website in the meantime. Hence, I needed to build a pipeline that systematically scrapes their website and creates a data set that contains every TJ&rsquo;s and the corresponding addresses.</p>
+<p>As it can be guessed, the scraped addresses are string-type, and we need to transform them so that our algorithm would make sense of them. The transformation can be done by geocoding. It is a process that resolves string type addresses into geographic coordinate pairs. Coordinate pairs are nothing but float-type tuples of which a numerical algorithm would make sense without any problem.</p>
+<p>The K-means algorithm requires a pre-defined number of clusters, <strong>k</strong>, where observations are partitioned into. Thus, one needs to guess the number of clusters in advance. In his original post, Sam had guessed it as 22, approximately square root of the number of Trader Joe&rsquo;s at the time (451), so that each warehouse would serve on average about 22 stores. I experimented with numbers between 21 and 23 for <strong>k</strong> in the line of his rationale, however, I couldn&rsquo;t come up with valid results; given that one-third of the Trader Joe&rsquo;s are located in California, some warehouses in other states would end up serving only up to 5-6 stores. I dont think his scenario would be financially feasible for any company. Hence, I decided to approach the problem slightly more analytical and apply a quick silhouette analysis.</p>
+<p>The silhouette score of the final configuration of the data is calculated by averaging the silhouette value of the individual data points (store locations). A silhouette value of an observation can be taught as its degree of similarity to its own cluster compared to other clusters. The score ranges from -1 to +1, where a high value indicates a more appropriate clustering configuration.</p>
+
+  <img src="../sit.png"  alt="Hello Friend"  class="center"  style="border-radius: 2 px ;"  />
+
+
+<p>Silhouette scores of different <strong>k</strong> values ranging from 13 to 20 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> are calculated, and <strong>k=19</strong> is found to be the most appropriate configuration.  Besides, the number of stores that each warehouse serves is more homogenously distributed this time as opposed to previously tried <strong>k</strong> values. It should be noted that the K-means algorithm only converges to a local minimum rather than a global minimum, hence the results are strongly influenced by the initial conditions. In other words, cluster configurations may seem different from run to run unless its random state is seeded, even as <strong>k</strong> stays constant.</p>
+<p>As the last step, It would be nice to have some reference addresses of warehouses to validate our findings. Unfortunately, Trader Joe&rsquo;s is reluctant to make the location of its warehouses public however one can reach information about some of its warehouses by digging deeper into the internet. Sam managed to find the address of six of them from various internet sources and shared them with their evidence in his original post at the time. I combine my findings with his and increase the number of warehouses locations to twelve, mainly thanks to <a href="https://panethos.wordpress.com/2015/08/15/charting-the-waters-of-trader-joes-distribution-network/">this blog post</a>.</p>
+<p>The following map shows all 539 TJ&rsquo;s in yellow while showing the 19 guessed warehouses in red. Also, the 12 &ldquo;known&rdquo; warehouse locations are depicted in green. It can be seen that the &ldquo;known&rdquo; warehouses are not too far from the guessed ones. It is fascinating to have &ldquo;acceptable&rdquo; guesses with such a basic algorithm.</p>
+
+  <img src="../tj.png"  alt="Hello Friend"  class="center"  style="border-radius: 2 px ;"  />
+
+
+<p>You can reach out to the source code of this project and to the created GeoDataFrame via my <a href="https://github.com/ytalp17/TJ">github repo</a>.</p>
+<p>Feel free to utilize the dataset for your own project :v:</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>I selected the range of <strong>k</strong> values as [13, 20]. The lower bound is 13 because I know that at least 12 warehouses exist in the light of my internet search. The upper bond is 20 as I already experienced with the values between [21, 23].&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 
     </div>
     
-      
-        <div class="pagination">
-          <div class="pagination__title">
-            <span class="pagination__title-h"
-              >Read other posts</span
-            >
-            <hr />
-          </div>
-          <div class="pagination__buttons">
-            
-            
-              <span class="button next">
-                <a href="https://ytalp17.github.io/sampleasample/post/hello/">
-                  <span class="button__text">Hello Friend</span>
-                  <span class="button__icon">→</span>
-                </a>
-              </span>
-            
-          </div>
-        </div>
       
     
 
@@ -255,7 +265,7 @@
 </svg>
 </span>
     <span class="logo__text"
-      >hello friend</span
+      >Sample A Sample</span
     >
     <span class="logo__cursor"></span>
   

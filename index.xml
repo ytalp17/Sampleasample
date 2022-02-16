@@ -27,7 +27,7 @@
         
         
         
-          Finding the location of TJ&#39;s warehouses using its stores by the help go K-means clustering
+          Finding the location of Trader Joe&#39;s, a well-known grocery retailer in the US, warehouses by utilizing the location of each TJ stores.
           
         
         </description>
@@ -70,25 +70,6 @@ This theme is pretty basic and covers all of the essentials. All you have to do 
         
         
           Header 2 #  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec interdum metus. Aenean rutrum ligula sodales ex auctor, sed tempus dui mollis. Curabitur ipsum dui, aliquet nec commodo at, tristique eget ante. Donec quis dolor nec nunc mollis interdum vel in purus. Sed vitae leo scelerisque, sollicitudin elit sed, congue ante. In augue nisl, vestibulum commodo est a, tristique porttitor est. Proin laoreet iaculis ornare. Nullam ut neque quam.
-          
-        
-        </description>
-    </item>
-    
-    <item>
-      <title>Hello Friend</title>
-      <link>https://ytalp17.github.io/sampleasample/post/hello/</link>
-      <pubDate>Wed, 17 Sep 1986 00:00:00 +0000</pubDate>
-      
-      <guid>https://ytalp17.github.io/sampleasample/post/hello/</guid>
-      <description>
-        
-          &lt;img src=&#34;https://ytalp17.github.io/sampleasample/img/hello.jpg&#34;/&gt;
-          
-        
-        
-        
-          &#34;Hello, friend?&#34; That&#39;s lame. Maybe I should give you a name?
           
         
         </description>
