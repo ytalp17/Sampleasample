@@ -96,10 +96,6 @@
           <li><a href="/sampleasample/about">About</a></li>
         
       
-        
-          <li><a href="/sampleasample/showcase">Showcase</a></li>
-        
-      
       
       
   </ul>
@@ -108,10 +104,6 @@
     
       
         <li><a href="/sampleasample/about">About</a></li>
-      
-    
-      
-        <li><a href="/sampleasample/showcase">Showcase</a></li>
       
     
   </ul>
@@ -207,8 +199,8 @@
     <div class="post-content">
       
       <p>Recently, I came across a <a href="https://sburer.github.io/2015/06/02/Trader-Joes.html">project</a> by <strong>Sam Burer</strong> via Hacker News archive. In his project, Sam mainly tries to find the location of warehouses/distribution centers of Trader Joe&rsquo;s, a well-known grocery retailer in the US, by utilizing the location of each Trader Joe&rsquo;s store.  He does it very creatively by exploiting centroids of the clusters suggested by the <strong>K-means</strong> algorithm, a basic algorithm that is primarily used to tackle unsupervised, clustering, problems in the Machine learning domain.</p>
-<p>With this project, I try not only to -somehow- update his project as I am encouraged by the oldness of his post (June 2015) but also tweak it just a little bit with my interpretation.</p>
-<p>Okey, let&rsquo;s start..</p>
+<p>With this project, I not only try to update his project as I am encouraged by the oldness of his post (June 2015) but also tweak it just a little bit with my interpretation.</p>
+<p>Okay, let&rsquo;s start..</p>
 <p>The number of Trader Joe&rsquo;s has increased from 451 to 539 since Sam&rsquo;s post. Besides, they have omitted the definitive list of their stores from their website in the meantime. Hence, I needed to build a pipeline that systematically scrapes their website and creates a data set that contains every TJ&rsquo;s and the corresponding addresses.</p>
 <p>As it can be guessed, the scraped addresses are string-type, and we need to transform them so that our algorithm would make sense of them. The transformation can be done by geocoding. It is a process that resolves string type addresses into geographic coordinate pairs. Coordinate pairs are nothing but float-type tuples of which a numerical algorithm would make sense without any problem.</p>
 <p>The K-means algorithm requires a pre-defined number of clusters, <strong>k</strong>, where observations are partitioned into. Thus, one needs to guess the number of clusters in advance. In his original post, Sam had guessed it as 22, approximately square root of the number of Trader Joe&rsquo;s at the time (451), so that each warehouse would serve on average about 22 stores. I experimented with numbers between 21 and 23 for <strong>k</strong> in the line of his rationale, however, I couldn&rsquo;t come up with valid results; given that one-third of the Trader Joe&rsquo;s are located in California, some warehouses in other states would end up serving only up to 5-6 stores. I dont think his scenario would be financially feasible for any company. Hence, I decided to approach the problem slightly more analytical and apply a quick silhouette analysis.</p>
@@ -217,14 +209,14 @@
   <img src="../sit.png"  alt="Hello Friend"  class="center"  style="border-radius: 2 px ;"  />
 
 
-<p>Silhouette scores of different <strong>k</strong> values ranging from 13 to 20 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> are calculated, and <strong>k=19</strong> is found to be the most appropriate configuration.  Besides, the number of stores that each warehouse serves is more homogenously distributed this time as opposed to previously tried <strong>k</strong> values. It should be noted that the K-means algorithm only converges to a local minimum rather than a global minimum, hence the results are strongly influenced by the initial conditions. In other words, cluster configurations may seem different from run to run unless its random state is seeded, even as <strong>k</strong> stays constant.</p>
-<p>As the last step, It would be nice to have some reference addresses of warehouses to validate our findings. Unfortunately, Trader Joe&rsquo;s is reluctant to make the location of its warehouses public however one can reach information about some of its warehouses by digging deeper into the internet. Sam managed to find the address of six of them from various internet sources and shared them with their evidence in his original post at the time. I combine my findings with his and increase the number of warehouses locations to twelve, mainly thanks to <a href="https://panethos.wordpress.com/2015/08/15/charting-the-waters-of-trader-joes-distribution-network/">this blog post</a>.</p>
-<p>The following map shows all 539 TJ&rsquo;s in yellow while showing the 19 guessed warehouses in red. Also, the 12 &ldquo;known&rdquo; warehouse locations are depicted in green. It can be seen that the &ldquo;known&rdquo; warehouses are not too far from the guessed ones. It is fascinating to have &ldquo;acceptable&rdquo; guesses with such a basic algorithm.</p>
+<p>Silhouette scores of different <strong>k</strong> values ranging from 13 to 20 <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> are calculated, and <strong>k=19</strong> is found to be the most appropriate configuration.  Besides, the number of stores that each warehouse serves is more homogeneously distributed this time as opposed to previously tried <strong>k</strong> values. It should be noted that the K-means algorithm only converges to a local minimum rather than a global minimum, hence the results are strongly influenced by the initial conditions. In other words, cluster configurations may seem different from run to run unless its random state is seeded, even as <strong>k</strong> stays constant.</p>
+<p>As the last step, It would be nice to have some reference addresses of warehouses to validate our findings. Unfortunately, Trader Joe&rsquo;s is reluctant to make the location of its warehouses public however one can reach information about some of its warehouses by digging deeper into the internet. Sam had managed to find the address of six of them from various internet sources and shared them with their evidence in his original post at the time. I combined my findings with his and increased the number of warehouses locations to twelve, mainly thanks to <a href="https://panethos.wordpress.com/2015/08/15/charting-the-waters-of-trader-joes-distribution-network/">this blog post</a>.</p>
+<p>The following map shows all 539 TJ&rsquo;s in orange while showing the 19 guessed warehouses in red. Also, the 12 &ldquo;known&rdquo; warehouse locations are depicted in green. It can be seen below that the &ldquo;known&rdquo; warehouses are not too far from the guessed ones. It is fascinating to have &ldquo;acceptable&rdquo; guesses with such a basic algorithm.</p>
 
   <img src="../tj.png"  alt="Hello Friend"  class="center"  style="border-radius: 2 px ;"  />
 
 
-<p>You can reach out to the source code of this project and to the created GeoDataFrame via my <a href="https://github.com/ytalp17/TJ">github repo</a>.</p>
+<p>You can reach out to the source code of this project and to the created GeoDataFrame via my <a href="https://github.com/ytalp17/TJ">GitHub repo</a>.</p>
 <p>Feel free to utilize the dataset for your own project :v:</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
