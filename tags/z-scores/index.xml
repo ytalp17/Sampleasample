@@ -27,7 +27,7 @@
         
         
         
-          A Comparison Tool For Yahoo! Fantasy Basketball.
+           I built a comparison tool for Yahoo! Fantasy Basketball on Dash Plotly. You can built your roster either by selecting your player from the dropdown menu or by simply copy your whole roster form the team roster tab of your Yahoo Fantasy web application and past it into the text input section, it will automatically transfer your players to the app!
           
         
         </description>
